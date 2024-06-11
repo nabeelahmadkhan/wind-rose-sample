@@ -42,9 +42,18 @@
         </button>
       </div>
     </nav>
-    <div class="container mt-5">
+    <div class="container mt-3">
       <div class="card card-body shadow">
         <h3>Wind Rose Chart</h3>
+        <div class="mt-3 col-2">
+          <label for="frequencySelect" class="form-label"
+            >Select Frequency</label
+          >
+          <select class="form-select" id="frequencySelect">
+            <option value="hours" selected>Hours</option>
+            <option value="percentage">Percentage</option>
+          </select>
+        </div>
         <div id="main" style="width: 100%; height: 600px"></div>
       </div>
     </div>
@@ -88,119 +97,144 @@
         },
       ];
 
-      var option = {
-        tooltip: {
-          trigger: "item",
-          formatter: function (params) {
-            return (
-              params.seriesName +
-              "<br/>" +
-              "Direction: " +
-              params.name +
-              "<br/>" +
-              "Frequency: " +
-              params.value +
-              " hours"
-            );
-          },
-          textStyle: {
-            color: "#000",
-          },
-        },
-        color: [
-          "#0033FF", // Mid Blue
-          "#3572EF", // Mid Cyan-Blue
-          "#5AB2FF", // Mid Cyan
-          "#41B06E", // Mid Teal
-          "#CCCC00", // Mid Olive
-          "#F8DE22", // Mid Goldenrod
-          "#FF8F00", // Mid Orange
-          "#FF3333", // Mid Red
-        ],
-        angleAxis: {
-          type: "category",
-          data: [
-            "N",
-            "NNE",
-            "NE",
-            "ENE",
-            "E",
-            "ESE",
-            "SE",
-            "SSE",
-            "S",
-            "SSW",
-            "SW",
-            "WSW",
-            "W",
-            "WNW",
-            "NW",
-            "NNW",
-          ],
-          boundaryGap: false,
-          axisTick: {
-            show: false,
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: "#ccc",
-            },
-          },
-          axisLabel: {
-            show: true,
-            interval: 0,
-            color: "#333",
-          },
-        },
-        radiusAxis: {
-          min: 0,
-          max: "75",
-          z: 10, // This ensures the axis components are rendered above the bars
-          axisLabel: {
-            show: true,
-            formatter: function (value) {
-              return value + " h";
-            },
-          },
-          axisTick: {
-            show: true,
-          },
-          axisLine: {
-            show: true,
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: "#ccc",
-            },
-          },
-        },
-        polar: {},
-        series: data.map((item) => ({
-          type: "bar",
-          data: item.values,
-          coordinateSystem: "polar",
-          name: item.name,
-          stack: "a",
-          emphasis: {
-            focus: "series",
-          },
-        })),
-        legend: {
-          show: true,
-          data: data.map((item) => item.name),
-          // width: "65%",
-          textStyle: {
-            color: "#333",
-          },
-          bottom: -5, // Adjust this value as needed for proper positioning
-          left: "center", // Center the legend horizontally
-          right: "center", // Ensure the legend occupies the entire width
-        },
-      };
+      function calculatePercentage(data) {
+        return data.map((item) => {
+          const total = item.values.reduce((sum, val) => sum + val, 0);
+          const percentageValues = item.values.map((val) =>
+            ((val / total) * 100).toFixed(2)
+          );
+          return {
+            ...item,
+            values: percentageValues,
+          };
+        });
+      }
 
-      myChart.setOption(option);
+      function getOption(data, unit) {
+        return {
+          tooltip: {
+            trigger: "item",
+            formatter: function (params) {
+              return (
+                params.seriesName +
+                "<br/>" +
+                "Direction: " +
+                params.name +
+                "<br/>" +
+                "Frequency: " +
+                params.value +
+                (unit === "hours" ? " hours" : " %")
+              );
+            },
+            textStyle: {
+              color: "#000",
+            },
+          },
+          color: [
+            "#0033FF", // Mid Blue
+            "#3572EF", // Mid Cyan-Blue
+            "#5AB2FF", // Mid Cyan
+            "#41B06E", // Mid Teal
+            "#CCCC00", // Mid Olive
+            "#F8DE22", // Mid Goldenrod
+            "#FF8F00", // Mid Orange
+            "#FF3333", // Mid Red
+          ],
+          angleAxis: {
+            type: "category",
+            data: [
+              "N",
+              "NNE",
+              "NE",
+              "ENE",
+              "E",
+              "ESE",
+              "SE",
+              "SSE",
+              "S",
+              "SSW",
+              "SW",
+              "WSW",
+              "W",
+              "WNW",
+              "NW",
+              "NNW",
+            ],
+            boundaryGap: false,
+            axisTick: {
+              show: false,
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "#ccc",
+              },
+            },
+            axisLabel: {
+              show: true,
+              interval: 0,
+              color: "#333",
+            },
+          },
+          radiusAxis: {
+            min: 0,
+            max: unit === "hours" ? "75" : "100",
+            z: 10, // This ensures the axis components are rendered above the bars
+            axisLabel: {
+              show: true,
+              formatter: function (value) {
+                return value + (unit === "hours" ? " h" : " %");
+              },
+            },
+            axisTick: {
+              show: true,
+            },
+            axisLine: {
+              show: true,
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "#ccc",
+              },
+            },
+          },
+          polar: {},
+          series: data.map((item) => ({
+            type: "bar",
+            data: item.values,
+            coordinateSystem: "polar",
+            name: item.name,
+            stack: "a",
+            emphasis: {
+              focus: "series",
+            },
+          })),
+          legend: {
+            show: true,
+            data: data.map((item) => item.name),
+            textStyle: {
+              color: "#333",
+            },
+            bottom: -5, // Adjust this value as needed for proper positioning
+            left: "center", // Center the legend horizontally
+            right: "center", // Ensure the legend occupies the entire width
+          },
+        };
+      }
+
+      // Initial chart rendering with hours
+      myChart.setOption(getOption(data, "hours"));
+
+      // Handle dropdown change
+      document
+        .getElementById("frequencySelect")
+        .addEventListener("change", function (e) {
+          const unit = e.target.value;
+          const updatedData =
+            unit === "percentage" ? calculatePercentage(data) : data;
+          myChart.setOption(getOption(updatedData, unit));
+        });
     </script>
   </body>
 </html>
