@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <g id="agro_observation" transform="translate(-56 -32)">
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="120" height="120" rx="60" transform="translate(56 32)" fill="#a47998"/>
+    <g id="agro_saha_gozlem" transform="translate(-73.572 10.589)">
+      <g id="Group_6" data-name="Group 6" transform="translate(152 59.743) rotate(-30)">
+        <path id="Path_8" data-name="Path 8" d="M0,36.174H7.235V0H0Z" transform="translate(17.787 38.928)" fill="#fff"/>
+        <g id="Ellipse_2" data-name="Ellipse 2" transform="translate(0 0)" fill="none" stroke="#fff" stroke-width="8">
+          <circle cx="21.705" cy="21.705" r="21.705" stroke="none"/>
+          <circle cx="21.705" cy="21.705" r="17.705" fill="none"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

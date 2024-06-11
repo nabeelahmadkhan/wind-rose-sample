@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="121" height="120" viewBox="0 0 121 120">
+  <g id="sap_feed" transform="translate(-55.512 -31)">
+    <ellipse id="Ellipse_7" data-name="Ellipse 7" cx="60.5" cy="60" rx="60.5" ry="60" transform="matrix(1, 0, 0, 1, 55.512, 31)" fill="#f5cd59"/>
+    <g id="agro_besleme" transform="translate(84.018 48.351)">
+      <g id="Group_18" data-name="Group 18">
+        <path id="Path_27" data-name="Path 27" d="M577.59,336.937c0-10.036-8.543-8.4-8.543-19.793h-16.8c0,9.873-8.252,10.712-8.252,19.793v41.988h33.59Z" transform="translate(-529.519 -294.432)" fill="#fff"/>
+        <path id="Path_28" data-name="Path 28" d="M562.7,316.772V304H552.139v12.772Z" transform="translate(-526.323 -291.062)" fill="#fff"/>
+        <path id="Path_29" data-name="Path 29" d="M609.05,314.623h10.018l11.669,25.232,4.076,3.052L621.92,310.142H608Z" transform="translate(-570.093 -293.731)" fill="#fff"/>
+        <path id="Path_30" data-name="Path 30" d="M642.269,304.344h-4.015v-7.257h4.015Z" transform="translate(-609.305 -295.429)" fill="#fff"/>
+        <path id="Path_31" data-name="Path 31" d="M639.914,293.193h-3.846a2.658,2.658,0,0,0,.979-1.723,3.927,3.927,0,0,0-.979-2.033h3.846a4.23,4.23,0,0,0-.822,2.033A2.766,2.766,0,0,0,639.914,293.193Z" transform="translate(-606.843 -289.436)" fill="#fff"/>
+        <path id="Path_32" data-name="Path 32" d="M670.733,317.742l-7.348-2.486h-8.936v2.486L648,315.256v-3.149l6.449-2.26v2.26h8.936l7.348-2.26Z" transform="translate(-648 -294.795)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>
