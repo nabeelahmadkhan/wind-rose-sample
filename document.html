@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document | Wind Rose Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .header {
+        height: 100px;
+        width: 100%;
+        background-color: antiquewhite;
+      }
+    </style>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="./assets/img/topraq_logo.svg" width="180" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </nav>
+    <div class="container mt-3">
+      <div class="card card-body shadow mt-3">
+        <a class="btn btn-link" href="/" style="width: fit-content">Back</a>
+        <h4>Wind Rose Chart Documentation</h4>
+        <p>
+          <strong>Overview:</strong> The Wind Rose Chart is a graphical tool
+          used to display the distribution of wind speeds and directions over a
+          specified period. It provides a visual representation of how wind
+          speed varies with direction, helping in understanding the wind
+          patterns and behavior in a particular region.
+        </p>
+        <p>
+          <strong>Data Representation:</strong> The data for the Wind Rose Chart
+          is represented in a structured format, where each wind speed range has
+          associated frequency values for various wind directions. The data is
+          divided into categories based on wind speed ranges (e.g., 0.0-0.2 m/s,
+          0.3-1.5 m/s, etc.), and each category contains values representing the
+          frequency of occurrence for specific wind directions (e.g., N, NE, E,
+          etc.).
+        </p>
+        <div>
+          <strong>Sample Data Structure:</strong>
+          <pre><code>
+     const data = [
+       {
+         name: "0.0-0.2 m/s",
+         values: [2, 3, 1, 4, 2, 3, 4, 6],
+       },
+       {
+         name: "0.3-1.5 m/s",
+         values: [7, 12, 10, 2, 4, 3, 5, 2],
+       },
+       {
+         name: "1.6-3.3 m/s",
+         values: [10, 14, 11, 6, 3, 15, 14, 11],
+       },
+       {
+         name: "3.4-5.4 m/s",
+         values: [12, 5, 13, 3, 3, 5, 6, 7],
+       },
+       {
+         name: "5.5-7.9 m/s",
+         values: [11, 3, 13, 5, 3, 4, 5, 7],
+       },
+       {
+         name: "8.0-10.7 m/s",
+         values: [8, 3, 10, 3, 3, 4, 5, 6],
+       },
+       {
+         name: "10.8-13.8 m/s",
+         values: [5, 1, 7, 2, 1, 2, 3, 4],
+       },
+       {
+         name: "13.9-17.1 m/s",
+         values: [1, 0, 1, 1, 0, 0, 1, 1],
+       },
+     ];
+               </code>
+             </pre>
+        </div>
+        <p>
+          <strong>Chart Configuration:</strong> The Wind Rose Chart is
+          configured using ECharts. The configuration involves setting up the
+          polar coordinates system, angle axis, radius axis, and series data.
+        </p>
+        <div>
+          <strong>Key Configuration Options:</strong>
+          <ul>
+            <li>
+              <strong>Tooltip:</strong> Provides detailed information about the
+              wind speed and direction when hovering over a segment.
+            </li>
+            <li>
+              <strong>Color:</strong> Defines the color scheme for different
+              wind speed ranges.
+            </li>
+            <li>
+              <strong>Angle Axis:</strong> Represents the wind directions (N,
+              NE, E, SE, S, SW, W, NW).
+            </li>
+            <li>
+              <strong>Radius Axis:</strong> Represents the frequency of wind
+              speeds in hours or percentage.
+            </li>
+            <li>
+              <strong>Series:</strong> Represents the data series for each wind
+              speed range, plotted as bars in a polar coordinate system.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <strong>Example Configuration:</strong>
+          <pre><code>
+     function getOption(data, unit) {
+       return {
+         tooltip: {
+           trigger: "item",
+           formatter: function (params) {
+             return (
+               params.seriesName +
+               "&lt;br/&gt;" +
+               "Direction: " +
+               params.name +
+               "&lt;br/&gt;" +
+               "Frequency: " +
+               params.value +
+               (unit === "hours" ? " hours" : " %")
+             );
+           },
+         },
+         color: [
+           "#0033FF", "#3572EF", "#5AB2FF", "#41B06E",
+           "#CCCC00", "#F8DE22", "#FF8F00", "#FF3333",
+         ],
+         angleAxis: {
+           type: "category",
+           data: directions,
+           boundaryGap: false,
+         },
+         radiusAxis: {
+           min: 0,
+           max: unit === "hours" ? "75" : "100",
+           axisLabel: {
+             formatter: function (value) {
+               return value + (unit === "hours" ? " h" : " %");
+             },
+           },
+         },
+         polar: {},
+         series: data.map((item) => ({
+           type: "bar",
+           data: item.values,
+           coordinateSystem: "polar",
+           name: item.name,
+           stack: "a",
+         })),
+         legend: {
+           data: data.map((item) => item.name),
+           bottom: -5,
+           left: "center",
+         },
+       };
+     }
+               </code></pre>
+        </div>
+        <div>
+          <strong>Interactive Features:</strong>
+          <ul>
+            <li>
+              <strong>Frequency Selection:</strong> Users can switch between
+              displaying frequencies in hours or percentage using a dropdown
+              menu. The chart updates dynamically based on the selection.
+            </li>
+            <li>
+              <strong>Tooltip:</strong> Hovering over a chart segment displays
+              detailed information about the wind speed range, direction, and
+              frequency.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <strong>Example of Frequency Calculation:</strong>
+          <pre><code>
+     function calculatePercentage(data) {
+       return data.map((item) => {
+         const total = item.values.reduce((sum, val) => sum + val, 0);
+         const percentageValues = item.values.map((val) =>
+           val === 0 ? 0 : ((val / total) * 100).toFixed(2)
+         );
+         return {
+           ...item,
+           values: percentageValues,
+         };
+       });
+     }
+               </code></pre>
+        </div>
+        <p>
+          <strong>Conclusion:</strong> The Wind Rose Chart is an effective way
+          to visualize wind speed and direction data. By using ECharts, the
+          chart is highly customizable and interactive, allowing users to switch
+          between different representations of the data and gain deeper insights
+          into wind patterns.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
