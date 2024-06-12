@@ -54,48 +54,106 @@
             <option value="percentage">Percentage</option>
           </select>
         </div>
-        <div id="main" style="width: 100%; height: 600px"></div>
+        <div class="row">
+          <div class="col-6 mt-4">
+            <h3>Wind Rose Chart - Hour Frequency</h3>
+            <p>
+              <strong>Overview:</strong> The Wind Rose Chart is a visual tool
+              used to depict the distribution of wind speeds and directions over
+              a specified period, typically in hours. This chart provides
+              insights into the wind patterns and behavior in a particular
+              region, helping in various meteorological and environmental
+              analyses.
+            </p>
+            <h4>Data Representation:</h4>
+            <ul>
+              <li>
+                <strong>Wind Speed Ranges:</strong> The data is categorized into
+                different wind speed ranges (e.g., 0.0-0.2 m/s, 0.3-1.5 m/s,
+                etc.).
+              </li>
+              <li>
+                <strong>Direction Frequencies:</strong> For each wind speed
+                range, the frequency of wind coming from specific directions (N,
+                NE, E, SE, S, SW, W, NW) is recorded in hours.
+              </li>
+            </ul>
+            <h4>Chart Features:</h4>
+            <ul>
+              <li>
+                <strong>Polar Coordinate System:</strong> The chart uses a polar
+                coordinate system, where directions are represented along the
+                angle axis, and the frequency in hours is represented along the
+                radius axis.
+              </li>
+              <li>
+                <strong>Stacked Bars:</strong> Each wind speed range is
+                represented as a stacked bar, making it easy to compare the
+                distribution of different wind speeds from various directions.
+              </li>
+              <li>
+                <strong>Interactive Tooltips:</strong> Hovering over a segment
+                of the chart displays detailed information about the wind speed
+                range, direction, and frequency in hours.
+              </li>
+            </ul>
+            <p>
+              By representing wind data in hours, the Wind Rose Chart provides a
+              clear and intuitive way to analyze how often winds of certain
+              speeds occur from different directions, aiding in comprehensive
+              environmental and meteorological assessments.
+            </p>
+            <a class="btn btn-link" href="/document.html"
+              >View Detailed Documentation</a
+            >
+          </div>
+          <div class="col-6">
+            <div id="main" style="width: 100%; height: 600px"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <script>
-      var chartDom = document.getElementById("main");
-      var myChart = echarts.init(chartDom);
 
-      var data = [
+    <script>
+      const chartDom = document.getElementById("main");
+      const myChart = echarts.init(chartDom);
+
+      const data = [
         {
           name: "0.0-0.2 m/s",
-          values: [2, 2, 1, 4, 2, 3, 4, 6, 1, 1, 3, 4, 2, 3, 4, 6],
+          values: [2, 3, 1, 4, 2, 3, 4, 6],
         },
         {
           name: "0.3-1.5 m/s",
-          values: [7, 12, 10, 2, 2, 3, 4, 0, 1, 2, 3, 2, 2, 3, 4, 6],
+          values: [7, 12, 10, 2, 4, 3, 5, 2],
         },
         {
           name: "1.6-3.3 m/s",
-          values: [10, 12, 11, 4, 2, 13, 14, 16, 11, 0, 13, 0, 12, 13, 14, 12],
+          values: [10, 14, 11, 6, 3, 15, 14, 11],
         },
         {
           name: "3.4-5.4 m/s",
-          values: [10, 2, 13, 2, 2, 3, 4, 6, 1, 2, 3, 2, 2, 3, 4, 6],
+          values: [12, 5, 13, 3, 3, 5, 6, 7],
         },
         {
           name: "5.5-7.9 m/s",
-          values: [10, 2, 13, 4, 2, 3, 4, 6, 1, 2, 3, 4, 1, 2, 3, 1],
+          values: [11, 3, 13, 5, 3, 4, 5, 7],
         },
         {
           name: "8.0-10.7 m/s",
-          values: [10, 2, 13, 2, 2, 3, 4, 6, 1, 2, 3, 2, 1, 2, 3, 1],
+          values: [8, 3, 10, 3, 3, 4, 5, 6],
         },
         {
           name: "10.8-13.8 m/s",
-          values: [10, 2, 8, 4, 2, 3, 4, 6, 1, 2, 3, 4, 2, 3, 4, 2],
+          values: [5, 1, 7, 2, 1, 2, 3, 4],
         },
         {
           name: "13.9-17.1 m/s",
-          values: [1, 0, 0, 1, 0, 0, 2, 1, 3, 2, 0, 1, 2, 1, 1, 2],
+          values: [1, 0, 1, 1, 0, 0, 1, 1],
         },
       ];
 
+      const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
       function calculatePercentage(data) {
         return data.map((item) => {
           const total = item.values.reduce((sum, val) => sum + val, 0);
@@ -142,24 +200,7 @@
           ],
           angleAxis: {
             type: "category",
-            data: [
-              "N",
-              "NNE",
-              "NE",
-              "ENE",
-              "E",
-              "ESE",
-              "SE",
-              "SSE",
-              "S",
-              "SSW",
-              "SW",
-              "WSW",
-              "W",
-              "WNW",
-              "NW",
-              "NNW",
-            ],
+            data: directions,
             boundaryGap: false,
             axisTick: {
               show: false,
