@@ -3,6 +3,7 @@ const myChart = echarts.init(chartDom);
 
 let WIND_SPEED = [];
 let WIND_DIRECTION = [];
+let chartData = [];
 
 const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 
@@ -74,9 +75,9 @@ const createChart = () => {
     // Output the final structure
     console.log(speedRanges);
 
-    const data = speedRanges;
+    chartData = speedRanges;
 
-    myChart.setOption(getOption(data, "hours"));
+    myChart.setOption(getOption(chartData, "hours"));
 };
 
 function calculatePercentage(data) {
@@ -144,7 +145,7 @@ function getOption(data, unit) {
         },
         radiusAxis: {
             min: 0,
-            max: unit === "hours" ? "20" : "100",
+            max: unit === "hours" ? "20" : "30",
             z: 10,
             axisLabel: {
                 show: true,
@@ -166,7 +167,7 @@ function getOption(data, unit) {
             },
         },
         polar: {},
-        series: data.map((item) => ({
+        series: chartData.map((item) => ({
             type: "bar",
             data: item.values,
             coordinateSystem: "polar",
@@ -178,7 +179,7 @@ function getOption(data, unit) {
         })),
         legend: {
             show: true,
-            data: data.map((item) => item.name),
+            data: chartData.map((item) => item.name),
             textStyle: {
                 color: "#333",
             },
@@ -194,6 +195,6 @@ document
     .addEventListener("change", function (e) {
         const unit = e.target.value;
         const updatedData =
-            unit === "percentage" ? calculatePercentage(data) : data;
+            unit === "percentage" ? calculatePercentage(chartData) : chartData;
         myChart.setOption(getOption(updatedData, unit));
     });
