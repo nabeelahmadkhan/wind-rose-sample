@@ -61,7 +61,6 @@
       var chartDom = document.getElementById("main");
       var myChart = echarts.init(chartDom);
 
-      // Data for the wind rose chart with adjusted values
       var data = [
         {
           name: "0.0-0.2 m/s",
@@ -93,15 +92,16 @@
         },
         {
           name: "13.9-17.1 m/s",
-          values: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          values: [1, 0, 0, 1, 0, 0, 2, 1, 3, 2, 0, 1, 2, 1, 1, 2],
         },
       ];
 
       function calculatePercentage(data) {
         return data.map((item) => {
           const total = item.values.reduce((sum, val) => sum + val, 0);
+          console.log("total", total);
           const percentageValues = item.values.map((val) =>
-            ((val / total) * 100).toFixed(2)
+            val === 0 ? 0 : ((val / total) * 100).toFixed(2)
           );
           return {
             ...item,
@@ -179,7 +179,7 @@
           radiusAxis: {
             min: 0,
             max: unit === "hours" ? "75" : "100",
-            z: 10, // This ensures the axis components are rendered above the bars
+            z: 10,
             axisLabel: {
               show: true,
               formatter: function (value) {
@@ -216,17 +216,15 @@
             textStyle: {
               color: "#333",
             },
-            bottom: -5, // Adjust this value as needed for proper positioning
-            left: "center", // Center the legend horizontally
-            right: "center", // Ensure the legend occupies the entire width
+            bottom: -5,
+            left: "center",
+            right: "center",
           },
         };
       }
 
-      // Initial chart rendering with hours
       myChart.setOption(getOption(data, "hours"));
 
-      // Handle dropdown change
       document
         .getElementById("frequencySelect")
         .addEventListener("change", function (e) {
