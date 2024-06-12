@@ -27,6 +27,8 @@
         background: #f5f5f5;
         border-radius: 9px;
         width: fit-content;
+
+        padding: 10px 20px;
       }
     </style>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -70,43 +72,169 @@
           etc.).
         </p>
         <div>
-          <strong>Sample Data Structure:</strong>
+          <strong>Sample Data Wind Speed & Direction:</strong>
+          <pre>
+            <code>
+    const WIND_SPEED =  [
+      {
+          "date": "06/12/2024 13:00",
+          "speed": 8.1
+      },
+      {
+          "date": "06/12/2024 12:00",
+          "speed": 7
+      },
+      {
+          "date": "06/12/2024 11:00",
+          "speed": 10.2
+      },
+      {
+          "date": "06/12/2024 10:00",
+          "speed": 7.5
+      },
+      {...},
+    ]</code></pre>
+
+          <pre>
+            <code>
+    const WIND_DIRECTION =  [
+      {
+          "date": "06/12/2024 13:00",
+          "direction": 4
+      },
+      {
+          "date": "06/12/2024 12:00",
+          "direction": 6
+      },
+      {
+          "date": "06/12/2024 11:00",
+          "direction": 8
+      },
+      {
+          "date": "06/12/2024 10:00",
+          "direction": 8
+      },
+      {...},
+    ]</code></pre>
+        </div>
+
+        <h4>Speed Ranges Calculation</h4>
+        <p>
+          This script calculates the frequency distribution of wind speeds into
+          specified ranges.
+        </p>
+
+        <h5>Detailed Explanation</h5>
+        <p>
+          1. Initializes an empty array <code>speedRanges</code> to hold speed
+          ranges with frequency data.<br />
+          2. Finds the minimum and maximum wind speeds from the provided
+          data.<br />
+          3. Defines the desired number of speed ranges.<br />
+          4. Calculates the size of each range based on the number of desired
+          ranges.<br />
+          5. Generates speed ranges by iterating over the number of ranges and
+          calculating the minimum and maximum values for each range.<br />
+          6. Initializes frequency counts for each direction within each speed
+          range.<br />
+          7. Populates the frequency data by categorizing wind speeds into the
+          appropriate range and incrementing the frequency count for each
+          direction.<br />
+          8. Removes unnecessary properties such as <code>min</code> and
+          <code>max</code> from the output.<br />
+        </p>
+
+        <div>
+          <pre>
+          <code>
+    const speedRanges = [];
+
+    // Find the minimum and maximum wind speeds in the data
+    const minSpeed = Math.min(...WIND_SPEED.map((item) => item.speed));
+    const maxSpeed = Math.max(...WIND_SPEED.map((item) => item.speed));
+
+    // Define the number of ranges you want
+    const numRanges = 8;
+
+    // Calculate the range size
+    const rangeSize = (maxSpeed - minSpeed) / numRanges;
+
+    // Generate the speed ranges
+    for (let i = 0; i < numRanges; i++) {
+        const rangeMin = minSpeed + i * rangeSize;
+        const rangeMax = minSpeed + (i + 1) * rangeSize;
+        speedRanges.push({
+            name: `${rangeMin.toFixed(1)}-${rangeMax.toFixed(1)} m/s`,
+            min: rangeMin,
+            max: rangeMax,
+            values: Array(8).fill(0), // Initialize with 8 zeros for the 8 directions
+        });
+    }
+
+    // Populate the frequency arrays based on the data
+    WIND_SPEED.forEach((entry) => {
+        const speed = entry.speed;
+        const dirEntry = WIND_DIRECTION.find((d) => d.date === entry.date);
+        if (dirEntry) {
+            const dir = dirEntry.direction;
+            const rangeIndex = speedRanges.findIndex(
+                (range) => speed >= range.min && speed < range.max
+            );
+            if (rangeIndex !== -1) {
+                speedRanges[rangeIndex].values[dir - 1] += 1;
+            }
+        }
+    });
+
+    // Remove the min and max properties from the final output
+    speedRanges.forEach((range) => {
+        delete range.min;
+        delete range.max;
+    });
+        
+          </code>
+        </pre>
+        </div>
+
+        <div>
+          <strong>Sample Data Structure created from above: </strong>
           <pre><code>
      const data = [
-       {
-         name: "0.0-0.2 m/s",
-         values: [2, 3, 1, 4, 2, 3, 4, 6],
-       },
-       {
-         name: "0.3-1.5 m/s",
-         values: [7, 12, 10, 2, 4, 3, 5, 2],
-       },
-       {
-         name: "1.6-3.3 m/s",
-         values: [10, 14, 11, 6, 3, 15, 14, 11],
-       },
-       {
-         name: "3.4-5.4 m/s",
-         values: [12, 5, 13, 3, 3, 5, 6, 7],
-       },
-       {
-         name: "5.5-7.9 m/s",
-         values: [11, 3, 13, 5, 3, 4, 5, 7],
-       },
-       {
-         name: "8.0-10.7 m/s",
-         values: [8, 3, 10, 3, 3, 4, 5, 6],
-       },
-       {
-         name: "10.8-13.8 m/s",
-         values: [5, 1, 7, 2, 1, 2, 3, 4],
-       },
-       {
-         name: "13.9-17.1 m/s",
-         values: [1, 0, 1, 1, 0, 0, 1, 1],
-       },
-     ];
-               </code>
+    
+     {
+         "name": "0.8-2.0 m/s",
+         "values": [ 0, 0, 1, 0, 0, 2, 3, 1]
+     },
+     {
+         "name": "2.0-3.1 m/s",
+         "values": [1, 0, 0, 0, 1, 3, 4, 3]
+     },
+     {
+         "name": "3.1-4.3 m/s",
+         "values": [0, 0, 2, 2, 3, 1, 5, 6]
+     },
+     {
+         "name": "4.3-5.5 m/s",
+         "values": [0, 1, 1, 2, 0, 1, 3, 0]
+     },
+     {
+         "name": "5.5-6.7 m/s",
+         "values": [0, 1, 1, 1, 2, 1, 1, 1]
+     },
+     {
+         "name": "6.7-7.8 m/s",
+         "values": [0, 0, 1, 1, 1, 1, 0, 1]
+     },
+     {
+         "name": "7.8-9.0 m/s",
+         "values": [0, 0, 0, 1, 1, 0, 1, 0]
+     },
+     {
+         "name": "9.0-10.2 m/s",
+         "values": [0, 0, 0, 0, 0, 0, 0, 0]
+     }
+ ]
+    </code>
              </pre>
         </div>
         <p>
