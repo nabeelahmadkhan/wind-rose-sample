@@ -127,7 +127,6 @@ function getOption(data, unit) {
         angleAxis: {
             type: "category",
             data: directions,
-            boundaryGap: false,
             axisTick: {
                 show: false,
             },
@@ -148,6 +147,7 @@ function getOption(data, unit) {
             max: unit === "hours" ? "20" : "30",
             z: 10,
             axisLabel: {
+                backgroundColor: '#fff',
                 show: true,
                 formatter: function (value) {
                     return value + (unit === "hours" ? " h" : " %");
