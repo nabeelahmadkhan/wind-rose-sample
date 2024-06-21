@@ -73,9 +73,6 @@ const createChart = () => {
         delete range.max;
     });
 
-    // Output the final structure
-    console.log(speedRanges);
-
     chartData = speedRanges;
 
     myChart.setOption(getOption(chartData, "hours"));
