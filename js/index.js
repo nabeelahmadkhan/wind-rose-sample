@@ -3,7 +3,6 @@ const myChart = echarts.init(chartDom);
 
 let WIND_SPEED = [];
 let WIND_DIRECTION = [];
-let chartData = [];
 
 const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 
@@ -43,7 +42,6 @@ const createChart = () => {
     for (let i = 0; i < numRanges; i++) {
         const rangeMin = minSpeed + i * rangeSize;
         const rangeMax = minSpeed + (i + 1) * rangeSize;
-
         speedRanges.push({
             name: `${rangeMin.toFixed(1)}-${rangeMax.toFixed(1)} m/s`,
             min: rangeMin,
@@ -76,9 +74,9 @@ const createChart = () => {
     // Output the final structure
     console.log(speedRanges);
 
-    chartData = speedRanges;
+    const data = speedRanges;
 
-    myChart.setOption(getOption(chartData, "hours"));
+    myChart.setOption(getOption(data, "hours"));
 };
 
 function calculatePercentage(data) {
@@ -116,15 +114,19 @@ function getOption(data, unit) {
             },
         },
         color: [
-            "#39B185", // Mid Blue
-            "#9CCB86", // Mid Cyan-Blue
-            "#E9E29C", // Mid Cyan
-            "#EEB479", // Mid Teal
-            "#E88471", // Mid Olive
+            "#0033FF", // Mid Blue
+            "#3572EF", // Mid Cyan-Blue
+            "#5AB2FF", // Mid Cyan
+            "#41B06E", // Mid Teal
+            "#CCCC00", // Mid Olive
+            "#F8DE22", // Mid Goldenrod
+            "#FF8F00", // Mid Orange
+            "#FF3333", // Mid Red
         ],
         angleAxis: {
             type: "category",
             data: directions,
+            boundaryGap: false,
             axisTick: {
                 show: false,
             },
@@ -142,10 +144,9 @@ function getOption(data, unit) {
         },
         radiusAxis: {
             min: 0,
-            max: unit === "hours" ? "20" : "30",
+            max: unit === "hours" ? "20" : "100",
             z: 10,
             axisLabel: {
-                backgroundColor: '#fff',
                 show: true,
                 formatter: function (value) {
                     return value + (unit === "hours" ? " h" : " %");
@@ -165,7 +166,7 @@ function getOption(data, unit) {
             },
         },
         polar: {},
-        series: chartData.map((item) => ({
+        series: data.map((item) => ({
             type: "bar",
             data: item.values,
             coordinateSystem: "polar",
@@ -177,7 +178,7 @@ function getOption(data, unit) {
         })),
         legend: {
             show: true,
-            data: chartData.map((item) => item.name),
+            data: data.map((item) => item.name),
             textStyle: {
                 color: "#333",
             },
@@ -193,6 +194,6 @@ document
     .addEventListener("change", function (e) {
         const unit = e.target.value;
         const updatedData =
-            unit === "percentage" ? calculatePercentage(chartData) : chartData;
+            unit === "percentage" ? calculatePercentage(data) : data;
         myChart.setOption(getOption(updatedData, unit));
     });
