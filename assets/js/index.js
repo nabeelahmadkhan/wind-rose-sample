@@ -100,10 +100,10 @@ function getOption(data, unit) {
                 return (
                     params.seriesName +
                     "<br/>" +
-                    "Direction: " +
+                    "<strong>Direction:</strong> " +
                     params.name +
                     "<br/>" +
-                    "Frequency: " +
+                    "<strong>Frequency:</strong> " +
                     params.value +
                     (unit === "hours" ? " hours" : " %")
                 );
@@ -111,6 +111,11 @@ function getOption(data, unit) {
             textStyle: {
                 color: "#000",
             },
+            backgroundColor: "rgba(255, 255, 255, 0.8)", // Custom background color
+            borderRadius: 10, // Border radius
+            borderWidth: 1, // Border width
+            borderColor: "#ccc", // Border color
+            padding: 10, // Padding inside the tooltip
         },
         color: [
             "#39B185", // Mid Blue
