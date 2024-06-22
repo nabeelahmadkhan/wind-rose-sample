@@ -122,6 +122,7 @@ function getOption(data, unit) {
         angleAxis: {
             type: "category",
             data: directions,
+            boundaryGap: false,
             axisTick: {
                 show: false,
             },
